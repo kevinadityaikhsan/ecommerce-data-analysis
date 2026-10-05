@@ -1,0 +1,148 @@
+/* Colors come from theme.py as CSS variables (--accent, --positive, ...).
+   Neutral colors are translucent so every rule works in light and dark themes. */
+
+/* ---------- Page chrome: no Streamlit header bar, compact padding ---------- */
+header[data-testid="stHeader"],
+[data-testid="stSidebarHeader"],
+[data-testid="stSidebarCollapseButton"],
+[data-testid="stExpandSidebarButton"],
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="stSidebarResizeHandle"] {
+    display: none !important;
+}
+
+[data-testid="stMainBlockContainer"] {
+    max-width: 1320px;
+    padding: 1.5rem 2.5rem 2rem 3.5rem;
+}
+
+/* ---------- Sidebar: overlay drawer ----------
+   Slides in while the pointer is on it (or a filter inside it has focus, so open
+   date pickers and dropdowns stay usable) and never resizes the main page. */
+section[data-testid="stSidebar"] {
+    --drawer-width: 290px;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    z-index: 999990;
+    height: 100vh;
+    width: var(--drawer-width) !important;
+    min-width: var(--drawer-width) !important;
+    max-width: var(--drawer-width) !important;
+    margin-left: 0 !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    transform: translateX(calc(-1 * var(--drawer-width))) !important;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+section[data-testid="stSidebar"]:hover,
+section[data-testid="stSidebar"]:focus-within {
+    transform: translateX(0) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .18);
+}
+
+/* The "Filters" handle on the left edge of the page. */
+section[data-testid="stSidebar"]::after {
+    content: "Filters";
+    position: absolute;
+    top: 1.5rem;
+    left: 100%;
+    padding: .9rem .4rem;
+    border-radius: 0 8px 8px 0;
+    background: var(--accent);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    writing-mode: vertical-rl;
+    cursor: pointer;
+    transition: opacity .2s ease;
+}
+
+section[data-testid="stSidebar"]:hover::after,
+section[data-testid="stSidebar"]:focus-within::after {
+    opacity: 0;
+}
+
+[data-testid="stSidebarContent"] {
+    padding-top: 1.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    section[data-testid="stSidebar"],
+    section[data-testid="stSidebar"]::after {
+        transition: none;
+    }
+}
+
+/* ---------- Page header ---------- */
+.page-title {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.page-subtitle {
+    margin: .2rem 0 1rem;
+    font-size: .875rem;
+    opacity: .65;
+}
+
+/* ---------- KPI cards ---------- */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: .75rem;
+    margin-bottom: .5rem;
+}
+
+.kpi {
+    padding: .7rem .95rem;
+    border: 1px solid rgba(128, 128, 128, .25);
+    border-radius: 10px;
+}
+
+.kpi__label {
+    font-size: .75rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    opacity: .65;
+    cursor: help;
+}
+
+.kpi__value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.25;
+}
+
+.kpi__delta {
+    margin-top: .1rem;
+    font-size: .75rem;
+}
+
+.kpi__delta--up { color: var(--positive); }
+.kpi__delta--down { color: var(--negative); }
+.kpi__delta--none { opacity: .45; }
+
+/* ---------- Answer callout ---------- */
+.insight {
+    padding: .6rem .9rem;
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    font-size: .95rem;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 640px) {
+    [data-testid="stMainBlockContainer"] {
+        padding: 1rem 1rem 1.5rem 2.6rem;
+    }
+
+    .page-title { font-size: 1.3rem; }
+    .kpi__value { font-size: 1.2rem; }
+}
