@@ -1,8 +1,4 @@
-"""Data layer: loads main_data.csv and computes every aggregate shown in the dashboard.
-
-Functions here return DataFrames, dicts, or numbers and never render anything,
-so the business logic can be read and tested apart from the layout.
-"""
+"""Data layer that loads main_data.csv and computes every aggregate shown in the dashboard."""
 from pathlib import Path
 
 import numpy as np
@@ -39,7 +35,7 @@ STATE_NAMES = {
 }
 
 
-# ---------------------------------------------------------------- Loading & filtering
+# Loading and filtering
 @st.cache_data
 def load_data():
     df = pd.read_csv(DATA_PATH, parse_dates=['order_purchase_timestamp'])
@@ -80,7 +76,7 @@ def previous_period(start, end):
     return previous_start, start - pd.Timedelta(days=1)
 
 
-# ---------------------------------------------------------------- KPIs
+# KPIs
 def kpis(orders):
     customers = to_customers(orders)
     return {
@@ -98,7 +94,7 @@ def pct_change(current, previous):
     return current / previous - 1
 
 
-# ---------------------------------------------------------------- Overview
+# Overview
 def monthly_summary(orders):
     monthly = orders.groupby(orders['order_purchase_timestamp'].dt.to_period('M')).agg(
         orders=('order_id', 'count'),
@@ -117,7 +113,7 @@ def top_categories_by_revenue(items, n=10):
     return top
 
 
-# ---------------------------------------------------------------- Basket size
+# Basket size
 def basket_summary(orders):
     basket = orders.groupby('basket_group', observed=False).agg(
         orders=('order_id', 'count'), median_value=('order_value', 'median')
@@ -144,7 +140,7 @@ def top_categories_in_multi_item_orders(items, n=10):
     return top
 
 
-# ---------------------------------------------------------------- Retention
+# Retention
 def customer_type_summary(customers):
     summary = customers.groupby('customer_type').agg(
         customers=('orders', 'count'),
@@ -157,7 +153,7 @@ def customer_type_summary(customers):
     return summary
 
 
-# ---------------------------------------------------------------- RFM segments
+# RFM segments
 def quartile_score(values, labels):
     try:
         return pd.qcut(values, q=4, labels=labels).astype(int)
@@ -200,7 +196,7 @@ def segment_summary(rfm):
     return segments.merge(SEGMENTS, on='segment')
 
 
-# ---------------------------------------------------------------- Geography
+# Geography
 def state_summary(orders):
     state = (orders.assign(freight_ratio=orders['freight_value'] / orders['order_value'])
              .groupby('customer_state').agg(orders=('order_id', 'count'), revenue=('order_value', 'sum'),

@@ -1,8 +1,4 @@
-"""Design tokens shared by the stylesheet and the charts.
-
-The same colors are used in the notebook: one highlight color for the key
-message, one secondary color for comparisons, and gray for context.
-"""
+"""Color tokens shared by the charts and the stylesheet, matching the notebook palette."""
 
 HIGHLIGHT = '#2a78d6'
 SECONDARY = '#eb6834'

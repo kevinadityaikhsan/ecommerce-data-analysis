@@ -1,15 +1,4 @@
-"""E-Commerce Performance Dashboard (entry point).
-
-Run from the submission folder:  streamlit run dashboard/dashboard.py
-
-Module layout:
-    analytics.py   data loading, filtering, and every aggregate (no UI)
-    charts.py      Altair chart builders
-    components.py  reusable UI pieces (header, KPI cards, callouts, cards)
-    views.py       one render function per tab
-    theme.py       color tokens shared by the charts and style.css
-    style.css      page styling (overlay filter drawer, cards, callouts)
-"""
+"""Entry point of the E-Commerce Performance Dashboard, run with `streamlit run dashboard/dashboard.py`."""
 import pandas as pd
 import streamlit as st
 
@@ -21,7 +10,7 @@ st.set_page_config(page_title='E-Commerce Performance Dashboard', page_icon='ðŸ“
                    initial_sidebar_state='expanded')
 load_styles()
 
-# ---------------------------------------------------------------- Filters
+# Filters
 DEFAULT_RANGE = (analytics.PERIOD_START.date(), analytics.PERIOD_END.date())
 st.session_state.setdefault('date_range', DEFAULT_RANGE)
 st.session_state.setdefault('states', [])
@@ -66,7 +55,7 @@ if orders.empty:
     st.warning('No delivered orders match the selected filters. Widen the date range or clear the state filter.')
     st.stop()
 
-# ---------------------------------------------------------------- KPIs
+# KPIs
 current = analytics.kpis(orders)
 previous = {}
 period = analytics.previous_period(start, end)
@@ -94,7 +83,7 @@ kpi_cards([
         'Short periods give lower values because there is less time to buy again.'),
 ])
 
-# ---------------------------------------------------------------- Tabs
+# Tabs
 overview, basket, retention, segments, geography = st.tabs(
     ['Overview', 'Basket size', 'Retention', 'Segments', 'Geography']
 )

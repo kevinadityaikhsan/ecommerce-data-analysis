@@ -1,7 +1,6 @@
-/* Colors come from theme.py as CSS variables (--accent, --positive, ...).
-   Neutral colors are translucent so every rule works in light and dark themes. */
+/* Colors are CSS variables injected from theme.py; neutral tones are translucent to suit light and dark themes. */
 
-/* ---------- Page chrome: no Streamlit header bar, compact padding ---------- */
+/* Page layout: hide the Streamlit header and native sidebar controls, which the drawer replaces. */
 header[data-testid="stHeader"],
 [data-testid="stSidebarHeader"],
 [data-testid="stSidebarCollapseButton"],
@@ -16,16 +15,15 @@ header[data-testid="stHeader"],
     padding: 1.5rem 2.5rem 2rem 3.5rem;
 }
 
-/* ---------- Sidebar: overlay drawer ----------
-   Slides in while the pointer is on it (or a filter inside it has focus, so open
-   date pickers and dropdowns stay usable) and never resizes the main page. */
+/* Filter drawer: the sidebar slides over the page instead of resizing it. */
 section[data-testid="stSidebar"] {
     --drawer-width: 290px;
     position: fixed !important;
     top: 0;
     left: 0;
     z-index: 999990;
-    height: 100vh;
+    height: 100vh !important;
+    height: 100dvh !important;
     width: var(--drawer-width) !important;
     min-width: var(--drawer-width) !important;
     max-width: var(--drawer-width) !important;
@@ -36,13 +34,15 @@ section[data-testid="stSidebar"] {
     transition: transform .25s ease, box-shadow .25s ease;
 }
 
+/* Open on hover, while its calendar or state list is shown, or on keyboard focus outside the input fields. */
 section[data-testid="stSidebar"]:hover,
-section[data-testid="stSidebar"]:focus-within {
+body:has([data-testid="stDateInputCalendar"], [role="listbox"]) section[data-testid="stSidebar"],
+section[data-testid="stSidebar"]:has(:focus-visible:not(input, [role="spinbutton"])) {
     transform: translateX(0) !important;
     box-shadow: 0 10px 40px rgba(0, 0, 0, .18);
 }
 
-/* The "Filters" handle on the left edge of the page. */
+/* "Filters" handle that remains visible at the edge of the closed drawer. */
 section[data-testid="stSidebar"]::after {
     content: "Filters";
     position: absolute;
@@ -61,12 +61,17 @@ section[data-testid="stSidebar"]::after {
 }
 
 section[data-testid="stSidebar"]:hover::after,
-section[data-testid="stSidebar"]:focus-within::after {
+body:has([data-testid="stDateInputCalendar"], [role="listbox"]) section[data-testid="stSidebar"]::after,
+section[data-testid="stSidebar"]:has(:focus-visible:not(input, [role="spinbutton"]))::after {
     opacity: 0;
 }
 
+/* Scrollable full-height panel, since the drawer itself stays overflow-visible to show the handle. */
 [data-testid="stSidebarContent"] {
+    height: 100%;
     padding-top: 1.25rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -76,7 +81,7 @@ section[data-testid="stSidebar"]:focus-within::after {
     }
 }
 
-/* ---------- Page header ---------- */
+/* Page header */
 .page-title {
     margin: 0;
     font-size: 1.6rem;
@@ -90,7 +95,7 @@ section[data-testid="stSidebar"]:focus-within::after {
     opacity: .65;
 }
 
-/* ---------- KPI cards ---------- */
+/* KPI cards */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -128,7 +133,7 @@ section[data-testid="stSidebar"]:focus-within::after {
 .kpi__delta--down { color: var(--negative); }
 .kpi__delta--none { opacity: .45; }
 
-/* ---------- Answer callout ---------- */
+/* Answer callout */
 .insight {
     padding: .6rem .9rem;
     border-left: 3px solid var(--accent);
@@ -137,7 +142,7 @@ section[data-testid="stSidebar"]:focus-within::after {
     font-size: .95rem;
 }
 
-/* ---------- Small screens ---------- */
+/* Small screens */
 @media (max-width: 640px) {
     [data-testid="stMainBlockContainer"] {
         padding: 1rem 1rem 1.5rem 2.6rem;

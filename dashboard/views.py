@@ -1,4 +1,4 @@
-"""One render function per tab. Views only arrange components; numbers come from analytics."""
+"""Tab views that arrange components and charts built from the aggregates in analytics.py."""
 import altair as alt
 import numpy as np
 import pandas as pd
@@ -186,7 +186,7 @@ def render_geography(orders):
     points['revenue_text'] = points['revenue'].map(brl)
     map_card(
         pdk.Deck(
-            map_style=None,  # Streamlit's theme-aware basemap
+            map_style=None,  # Use Streamlit's theme-aware basemap.
             layers=[pdk.Layer(
                 'ScatterplotLayer', data=points, get_position='[geolocation_lng, geolocation_lat]',
                 get_radius='radius', get_fill_color=[42, 120, 214, 90], pickable=True,

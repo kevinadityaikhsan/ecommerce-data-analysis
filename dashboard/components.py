@@ -1,4 +1,4 @@
-"""Reusable UI components: small HTML blocks styled by style.css, plus card wrappers."""
+"""Reusable UI components rendered as HTML blocks styled by style.css."""
 import re
 from dataclasses import dataclass
 from html import escape
@@ -16,7 +16,7 @@ def load_styles():
     st.html(f'<style>{theme.css_variables()}\n{STYLESHEET.read_text(encoding="utf-8")}</style>')
 
 
-# ---------------------------------------------------------------- Formatting
+# Formatting
 def brl(value):
     if pd.isna(value):
         return '–'
@@ -29,7 +29,7 @@ def compact(value):
     return f'{value / 1e6:,.2f}M' if abs(value) >= 1e6 else f'{value:,.0f}'
 
 
-# ---------------------------------------------------------------- Components
+# Components
 def page_header(title, subtitle):
     st.html(f'<h1 class="page-title">{escape(title)}</h1><p class="page-subtitle">{escape(subtitle)}</p>')
 

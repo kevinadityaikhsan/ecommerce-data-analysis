@@ -1,4 +1,4 @@
-"""Altair chart builders. Every chart starts at zero, labels its values, and shows a tooltip."""
+"""Altair chart builders with zero-based axes, value labels, and tooltips."""
 import altair as alt
 
 from theme import HIGHLIGHT, MUTED
