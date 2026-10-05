@@ -1,4 +1,4 @@
-# E-Commerce Public Dataset Dashboard ✨
+# E-Commerce Public Dataset Dashboard
 
 Data analysis project on the E-Commerce Public Dataset (Olist, Brazil). It covers delivered orders from January 2017 to August 2018 and answers two questions:
 
